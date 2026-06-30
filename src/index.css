@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --color-ink: #0a0a0f;
+  --color-surface: #13131a;
+  --color-surface-raised: #1a1a24;
+  --color-line: #2a2a36;
+  --color-paper: #ededf2;
+  --color-paper-dim: #9999a8;
+  --color-signal: #6e56ff;
+  --color-signal-dim: #4a3aad;
+  --color-trace: #3b82f6;
+  --color-ember: #ff5a3c;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-ink);
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  /* scroll-behavior is intentionally NOT set to smooth here — Lenis owns
+     scroll easing now. Having both fight over the same scroll would cause
+     stutter, since each tries to apply its own interpolation curve. */
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+  }
+  /* #root is the actual scroll content Lenis measures. 3D-rotated
+     descendants (the SceneStage panels) can expand an ancestor's
+     scrollWidth past the viewport on mobile Safari/Chrome even with
+     overflow-x:hidden on html/body — overflow-x:hidden directly on the
+     element containing the 3D content is what actually clips it, since
+     hidden on a distant ancestor doesn't reliably stop a 3D-transformed
+     descendant's projected bounding box from being counted. */
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+  section#build {
+    scroll-margin-top: 0;
+  }
+  ::selection {
+    background-color: var(--color-signal);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
